@@ -74,15 +74,12 @@
                             <td>{{ $row->dept_name }} </td>
                             <td>{{ $row->status }} </td>
                             <td>
-                                                                    <form action="{{ route('users.destroy' ,$row->id) }}" method="POST">
-
-                                                                            @csrf
-                                                                            @method('DELETE')
-
-                                                                            <button type="submit" class="btn btn-danger" title="Delete"  ><i class="fa fa-user"></i>Delete</button>
-                                                                        </form>
-
-                                                                    </td>
+                                <form action="{{ route('users.destroy' ,$row->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" title="Delete"  ><i class="fa fa-user"></i>Delete</button>
+                                </form>
+                         </td>
                         </tr>
                          @endforeach
                       

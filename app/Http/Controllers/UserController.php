@@ -23,52 +23,58 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    
+     public function index()
+        {
 
-        $department = Department::latest()->select( 'dept_id', 'dept_name', 'color','department.dept_id')
-        // ->join('users', 'users.department', '=', 'users.department')
-        ->paginate(5);
-        $users = Users::latest()->select('id','name', 'email', 'password', 'remember_token', 'phone', 'role', 'status', 'department', 'users.created_at', 'users.updated_at','dept_name','color')->join('department', 'department.dept_id', '=', 'users.department')->paginate(5);
-        return view('users.index',compact('department', 'users'))
+            $department = Department::latest()->select( 'dept_id', 'dept_name', 'color','department.dept_id')
+            // ->join('users', 'users.department', '=', 'users.department')
+            ->paginate(5);
+            $users = Users::latest()->select('id','name', 'email', 'password', 'remember_token', 'phone', 'role', 'status', 'department', 'users.created_at', 'users.updated_at','dept_name','color')->join('department', 'department.dept_id', '=', 'users.department')->paginate(5);
+            return view('users.index',compact('department', 'users'))
 
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+                ->with('i', (request()->input('page', 1) - 1) * 5);
 
-    }
+        }
 
      public function users($id)
-    {
+        {
 
-        $department = Department::latest()->select( 'dept_id', 'dept_name', 'color','department.dept_id')
-        ->paginate(5);
-        $users = Users::latest()->select('id','name', 'email', 'password', 'remember_token', 'phone', 'role', 'status', 'department', 'users.created_at', 'users.updated_at','dept_name','color')->where('users.department', $id)->join('department', 'department.dept_id', '=', 'users.department')->paginate(5);
-        return view('users.index',compact('department', 'users'))
+            $department = Department::latest()->select( 'dept_id', 'dept_name', 'color','department.dept_id')
+            ->paginate(5);
+            $users = Users::latest()->select('id','name', 'email', 'password', 'remember_token', 'phone', 'role', 'status', 'department', 'users.created_at', 'users.updated_at','dept_name','color')->where('users.department', $id)->join('department', 'department.dept_id', '=', 'users.department')->paginate(5);
+            return view('users.index',compact('department', 'users'))
 
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+                ->with('i', (request()->input('page', 1) - 1) * 5);
 
-    }
+        }
+    public function create()
+        {
 
+            $roles = Role::pluck('name','name')->all();
+
+            return view('users.create',compact('roles'));
+
+        }
 
      public function store(Request $request)
+        {
+            request()->validate([
 
-    {
+                'name' => 'required',
+                'email' => 'required',
+                'phone' => 'required',
+                'status' => 'required',
+                'role' => 'required',
+            ]);
 
-        request()->validate([
+            Users::create($request->all());
 
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'status' => 'required',
-            'role' => 'required',
-        ]);
+            return redirect()->route('users.index')
 
-        Users::create($request->all());
+            ->with('success','Users created successfully.');
 
-        return redirect()->route('users.index')
-
-        ->with('success','Users created successfully.');
-
-    }
+        }
 
         /**
 

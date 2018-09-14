@@ -1,6 +1,17 @@
 @extends('admin/layouts.admin')
 
 @section('content')
+
+@if ($message = Session::get('success'))
+
+<div class="alert alert-success">
+
+  <p>{{ $message }}</p>
+
+</div>
+
+@endif
+
 <div class="ks-column ks-page">
         <div class="ks-page-header">
             <section class="ks-title-and-subtitle">

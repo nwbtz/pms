@@ -17,13 +17,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/admin', 'AdminController@index')->name('home');
-Route::resource('department','DepartmentController');
-Route::resource('users','UserController');
-Route::get('deptusers/{id}', 'UserController@users');
-Route::resource('projects','ProjectController');
-Route::get('approval','EventController@approval');
+Route::group(['middleware' => ['auth']], function() {
 
-Route::resource('events', 'EventController');
-Route::resource('calendar', 'CalendarController');
+    Route::resource('roles','RoleController');
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/admin', 'AdminController@index')->name('home');
+    Route::resource('department','DepartmentController');
+    Route::resource('users','UserController');
+    Route::get('projectdetail/{id}', 'ProjectController@projectdetail');
+    Route::resource('projects','ProjectController');
+    Route::get('approval','EventController@approval');
+    Route::get('guest','GuestController@index');
+    Route::resource('events', 'EventController');
+    Route::resource('calendar', 'CalendarController');
+
+});
